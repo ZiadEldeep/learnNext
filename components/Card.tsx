@@ -5,8 +5,9 @@ import Image from 'next/image';
 interface Card {
   title: string;
   content: string;
+  gh?: string;
 }
-const Card: React.FC<Card> = ({ title, content }) => {
+const Card: React.FC<Card> = ({ title, content ,gh }) => {
   return (
     <div className="bg-white shadow-lg w-1/3 rounded-lg overflow-hidden pb-5 mb-7 mx-auto border-2 border-red-500 float-left">
       <div className="relative "> 
@@ -17,9 +18,9 @@ const Card: React.FC<Card> = ({ title, content }) => {
           </svg>
         </div>
       </div>
-      <h3 className="text-xl font-bold text-gray-900 px-4 py-2">Walter White</h3>
-      <span className="text-sm font-medium text-gray-600 px-4 py-1">Master Chef</span>
-      <p className="text-base text-gray-600 px-4 py-2">Velit aut quia fugit et et. Dolorum ea voluptate vel tempore tenetur ipsa quae aut. Ipsum exercitationem iure minima enim corporis et voluptate.</p>
+      <h3 className="text-xl font-bold text-gray-900 px-4 py-2">{title}</h3>
+      <span className="text-sm font-medium text-gray-600 px-4 py-1">{gh}</span>
+      <p className="text-base text-gray-600 px-4 py-2">{content}</p>
       <ul className="flex justify-around p-4 bg-gray-100 rounded-lg">
         <li><i className="fab fa-twitter text-gray-400 hover:text-gray-600"></i></li>
         <li><i className="fab fa-facebook-f text-gray-400 hover:text-gray-600"></i></li>
