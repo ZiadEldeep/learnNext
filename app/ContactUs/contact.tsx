@@ -8,10 +8,8 @@ import { z } from 'zod';
 const contactSchema = z.object({
   name: z.string().min(1, "Name is required").max(50, "Name can't exceed 50 characters"),
   email: z.string().email("Invalid email address"),
-  // phone: z.string().optional().regex(/^\+?[1-9]\d{1,14}$/, "Invalid phone number"),
   subject: z.string().min(1, "Subject is required"),
   message: z.string().min(10, "Message must be at least 10 characters long"),
-  attachment: z.any().optional(),
 });
 
 type ContactFormData = z.infer<typeof contactSchema>;
@@ -20,10 +18,8 @@ const Contact = () => {
   const [formData, setFormData] = useState<ContactFormData>({
     name: '',
     email: '',
-    // phone: '',
     subject: '',
     message: '',
-    attachment: null,
   });
 
   const [errors, setErrors] = useState<Partial<Record<keyof ContactFormData, string>>>({});
@@ -31,8 +27,8 @@ const Contact = () => {
   const [submitSuccess, setSubmitSuccess] = useState(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-    const { name, value, files } = e.target;
-    setFormData({ ...formData, [name]: files ? files[0] : value });
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -46,10 +42,8 @@ const Contact = () => {
       setErrors({
         name: formattedErrors.name?._errors[0],
         email: formattedErrors.email?._errors[0],
-        // phone: formattedErrors.phone?._errors[0],
         subject: formattedErrors.subject?._errors[0],
         message: formattedErrors.message?._errors[0],
-        attachment: formattedErrors.attachment?._errors[0],
       });
       setIsSubmitting(false);
       return;
@@ -63,10 +57,8 @@ const Contact = () => {
       setFormData({
         name: '',
         email: '',
-        // phone: '',
         subject: '',
         message: '',
-        attachment: null,
       });
       setErrors({});
     } catch (error) {
@@ -126,21 +118,6 @@ const Contact = () => {
               />
               {errors.email && <p className="text-red-500 text-xs mt-2">{errors.email}</p>}
             </div>
-            {/* <div>
-              <label htmlFor="phone" className="block text-sm font-medium text-gray-700">
-                Phone Number (Optional)
-              </label>
-              <input
-                id="phone"
-                name="phone"
-                type="tel"
-                className="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm placeholder-gray-500 text-gray-900 focus:ring-teal-500 focus:border-teal-500 sm:text-sm"
-                placeholder="+1234567890"
-                value={formData.phone}
-                onChange={handleChange}
-              />
-              {errors.phone && <p className="text-red-500 text-xs mt-2">{errors.phone}</p>}
-            </div> */}
             <div>
               <label htmlFor="subject" className="block text-sm font-medium text-gray-700">
                 Subject
@@ -175,19 +152,6 @@ const Contact = () => {
               ></textarea>
               {errors.message && <p className="text-red-500 text-xs mt-2">{errors.message}</p>}
             </div>
-            <div>
-              <label htmlFor="attachment" className="block text-sm font-medium text-gray-700">
-                Attachment (Optional)
-              </label>
-              <input
-                id="attachment"
-                name="attachment"
-                type="file"
-                className="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm placeholder-gray-500 text-gray-900 focus:ring-teal-500 focus:border-teal-500 sm:text-sm"
-                onChange={handleChange}
-              />
-              {errors.attachment && <p className="text-red-500 text-xs mt-2">{errors.attachment}</p>}
-            </div>
           </div>
           <div>
             <button
@@ -197,7 +161,7 @@ const Contact = () => {
                 isSubmitting ? 'bg-[rgb(135_126_255/var(--tw-bg-opacity))]' : 'bg-[rgb(135_126_255/var(--tw-bg-opacity))] hover:bg-[rgb(100_90_200/var(--tw-bg-opacity))]'
               } focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500`}
             >
-              {isSubmitting ? 'Submitting...' : 'Send Message'}
+              {isSubmitting ? 'Submitting.......' : 'Send Message'}
             </button>
           </div>
         </form>
