@@ -112,10 +112,11 @@ export default function Home() {
       </div> */}
       <>
 {/* <div className="flex flex-wrap justify-center  p-4 m-4 gap-2"> */}
-      <Card title="Card 1" content="This is the content of card 1."  />
-      <Card title="Card 2" content="This is the content of card 2." gh="xcx"/>
-      <Card title="Card 3" content="This is the content of card 3." gh="mmm"/>
+      {/* <Card title="Card 1" content="This is the content of card 1."  /> */}
+      {/* <Card title="Card 2" content="This is the content of card 2." gh="xcx"/> */}
+      {/* <Card title="Card 3" content="This is the content of card 3." gh="mmm"/> */}
     {/* </div> */}
+    
       </>
     </main>
   );

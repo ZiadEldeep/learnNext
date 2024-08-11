@@ -8,7 +8,10 @@ import { z } from 'zod';
 const contactSchema = z.object({
   name: z.string().min(1, "Name is required").max(50, "Name can't exceed 50 characters"),
   email: z.string().email("Invalid email address"),
+  // phone: z.string().optional().regex(/^\+?[1-9]\d{1,14}$/, "Invalid phone number"),
+  subject: z.string().min(1, "Subject is required"),
   message: z.string().min(10, "Message must be at least 10 characters long"),
+  attachment: z.any().optional(),
 });
 
 type ContactFormData = z.infer<typeof contactSchema>;
@@ -17,18 +20,24 @@ const Contact = () => {
   const [formData, setFormData] = useState<ContactFormData>({
     name: '',
     email: '',
+    // phone: '',
+    subject: '',
     message: '',
+    attachment: null,
   });
 
   const [errors, setErrors] = useState<Partial<Record<keyof ContactFormData, string>>>({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitSuccess, setSubmitSuccess] = useState(false);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+    const { name, value, files } = e.target;
+    setFormData({ ...formData, [name]: files ? files[0] : value });
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setIsSubmitting(true);
 
     const result = contactSchema.safeParse(formData);
 
@@ -37,87 +46,158 @@ const Contact = () => {
       setErrors({
         name: formattedErrors.name?._errors[0],
         email: formattedErrors.email?._errors[0],
+        // phone: formattedErrors.phone?._errors[0],
+        subject: formattedErrors.subject?._errors[0],
         message: formattedErrors.message?._errors[0],
+        attachment: formattedErrors.attachment?._errors[0],
       });
+      setIsSubmitting(false);
       return;
     }
 
-    // Handle the valid form data (e.g., send it to an API)
-    console.log('Form submitted:', result.data);
-    setErrors({});
+    // Simulate a form submission
+    try {
+      // Assuming API call here
+      console.log('Form submitted:', result.data);
+      setSubmitSuccess(true);
+      setFormData({
+        name: '',
+        email: '',
+        // phone: '',
+        subject: '',
+        message: '',
+        attachment: null,
+      });
+      setErrors({});
+    } catch (error) {
+      console.error("Submission error:", error);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100 py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-md w-full space-y-8">
+    <div className="min-h-screen flex items-center justify-center bg-gray-50 py-16 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-xl w-full space-y-8">
         <div>
-          <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
-            ContactUs
+          <h2 className="text-center text-4xl font-extrabold text-gray-800">
+            Contact Us
           </h2>
-          <p className="mt-2 text-center text-sm text-gray-600">
-            We will be Happy if you Contact Us
+          <p className="mt-4 text-center text-md text-gray-600">
+            Fill out the form below, and we’ll get back to you as soon as possible.
           </p>
         </div>
-        <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
-          <input type="hidden" name="remember" value="true" />
-          <div className="rounded-md shadow-sm -space-y-px">
+        {submitSuccess && (
+          <div className="text-center text-green-600 font-semibold">
+            Your message has been sent successfully!
+          </div>
+        )}
+        <form className="space-y-6" onSubmit={handleSubmit}>
+          <div className="space-y-4">
             <div>
-              <label htmlFor="name" className="sr-only">
+              <label htmlFor="name" className="block text-sm font-medium text-gray-700">
                 Name
               </label>
               <input
                 id="name"
                 name="name"
                 type="text"
-                autoComplete="name"
                 required
-                className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                className="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm placeholder-gray-500 text-gray-900 focus:ring-teal-500 focus:border-teal-500 sm:text-sm"
                 placeholder="Your Name"
                 value={formData.name}
                 onChange={handleChange}
               />
-              {errors.name && <p className="text-red-500 text-xs mt-1">{errors.name}</p>}
+              {errors.name && <p className="text-red-500 text-xs mt-2">{errors.name}</p>}
             </div>
             <div>
-              <label htmlFor="email" className="sr-only">
+              <label htmlFor="email" className="block text-sm font-medium text-gray-700">
                 Email address
               </label>
               <input
                 id="email"
                 name="email"
                 type="email"
-                autoComplete="email"
                 required
-                className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                className="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm placeholder-gray-500 text-gray-900 focus:ring-teal-500 focus:border-teal-500 sm:text-sm"
                 placeholder="Email address"
                 value={formData.email}
                 onChange={handleChange}
               />
-              {errors.email && <p className="text-red-500 text-xs mt-1">{errors.email}</p>}
+              {errors.email && <p className="text-red-500 text-xs mt-2">{errors.email}</p>}
+            </div>
+            {/* <div>
+              <label htmlFor="phone" className="block text-sm font-medium text-gray-700">
+                Phone Number (Optional)
+              </label>
+              <input
+                id="phone"
+                name="phone"
+                type="tel"
+                className="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm placeholder-gray-500 text-gray-900 focus:ring-teal-500 focus:border-teal-500 sm:text-sm"
+                placeholder="+1234567890"
+                value={formData.phone}
+                onChange={handleChange}
+              />
+              {errors.phone && <p className="text-red-500 text-xs mt-2">{errors.phone}</p>}
+            </div> */}
+            <div>
+              <label htmlFor="subject" className="block text-sm font-medium text-gray-700">
+                Subject
+              </label>
+              <select
+                id="subject"
+                name="subject"
+                required
+                className="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm placeholder-gray-500 text-gray-900 focus:ring-teal-500 focus:border-teal-500 sm:text-sm"
+                value={formData.subject}
+                onChange={handleChange}
+              >
+                <option value="" disabled>Select a Subject</option>
+                <option value="support">Support</option>
+                <option value="feedback">Feedback</option>
+              </select>
+              {errors.subject && <p className="text-red-500 text-xs mt-2">{errors.subject}</p>}
             </div>
             <div>
-              <label htmlFor="message" className="sr-only">
+              <label htmlFor="message" className="block text-sm font-medium text-gray-700">
                 Message
               </label>
               <textarea
                 id="message"
                 name="message"
-                rows={4}
+                rows={5}
                 required
-                className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                className="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm placeholder-gray-500 text-gray-900 focus:ring-teal-500 focus:border-teal-500 sm:text-sm"
                 placeholder="Your Message"
                 value={formData.message}
                 onChange={handleChange}
               ></textarea>
-              {errors.message && <p className="text-red-500 text-xs mt-1">{errors.message}</p>}
+              {errors.message && <p className="text-red-500 text-xs mt-2">{errors.message}</p>}
+            </div>
+            <div>
+              <label htmlFor="attachment" className="block text-sm font-medium text-gray-700">
+                Attachment (Optional)
+              </label>
+              <input
+                id="attachment"
+                name="attachment"
+                type="file"
+                className="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm placeholder-gray-500 text-gray-900 focus:ring-teal-500 focus:border-teal-500 sm:text-sm"
+                onChange={handleChange}
+              />
+              {errors.attachment && <p className="text-red-500 text-xs mt-2">{errors.attachment}</p>}
             </div>
           </div>
           <div>
             <button
               type="submit"
-              className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+              disabled={isSubmitting}
+              className={`w-full flex justify-center py-3 px-4 border border-transparent text-sm font-medium rounded-lg text-white ${
+                isSubmitting ? 'bg-[rgb(135_126_255/var(--tw-bg-opacity))]' : 'bg-[rgb(135_126_255/var(--tw-bg-opacity))] hover:bg-[rgb(100_90_200/var(--tw-bg-opacity))]'
+              } focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500`}
             >
-              Send Message
+              {isSubmitting ? 'Submitting...' : 'Send Message'}
             </button>
           </div>
         </form>
