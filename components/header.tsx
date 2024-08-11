@@ -4,7 +4,7 @@ import React from 'react';
 
 const Header: React.FC = () => {
   return (
-    <header className="bg-blue-600 text-white py-4 w-full h-15 rounded-md mb-9 mt-0" >
+    <header className="bg-blue-300 text-white py-4 w-full h-15 rounded-md mb-2  mt-2" >
       <div className="container mx-auto flex justify-between items-center px-4">
         <Link href="/" className="text-2xl font-bold">MyCard</Link>
         <nav>

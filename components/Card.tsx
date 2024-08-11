@@ -9,7 +9,7 @@ interface Card {
 }
 const Card: React.FC<Card> = ({ title, content ,gh }) => {
   return (
-    <div className="bg-white shadow-lg w-1/3 rounded-lg overflow-hidden pb-5 mb-7 mx-auto border-2 border-red-500 float-left">
+    <div className="bg-white shadow-lg w-1/3 rounded-lg overflow-hidden pb-5 mb-5 mx-auto border-2 border-red-500 float-left">
       <div className="relative "> 
         <Image src="/image/chefs-1.jpg" alt="It's a chef" layout="responsive" width={100} height={100} className=' object-contain' />
         <div className="absolute bottom-0 w-full transform -translate-x-1/2 left-1/2">
