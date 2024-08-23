@@ -7,6 +7,7 @@ import Contact from "./ContactUs/contact";
 import Card from "@/components/Card";
 import Card1 from "./card1/page";
 import BlogPage from "./blog/page";
+import FeedbackComponent from "./feedback/page";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -25,7 +26,8 @@ export default function RootLayout({
       <body className={inter.className}>
       {/* <Header /> */}
       {/* <Contact/>   */}
-    <BlogPage />
+    {/* <BlogPage /> */}
+    <FeedbackComponent />
         {children}
         {/* <Footer /> */}
         </body>
