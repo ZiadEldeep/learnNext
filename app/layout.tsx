@@ -4,6 +4,9 @@ import "./globals.css";
 import Header from "@/components/header";
 import Footer from "@/components/footer";
 import Contact from "./ContactUs/contact";
+import Card from "@/components/Card";
+import Card1 from "./card1/page";
+import BlogPage from "./blog/page";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -21,7 +24,8 @@ export default function RootLayout({
     <html lang="en">
       <body className={inter.className}>
       {/* <Header /> */}
-      <Contact/>  
+      {/* <Contact/>   */}
+    <BlogPage />
         {children}
         {/* <Footer /> */}
         </body>

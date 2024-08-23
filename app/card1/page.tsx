@@ -6,9 +6,9 @@ const Card1 = () => {
     <div>
       <>
       <Card title="ball" content="This is the content of card 1." />
-      <Card title="basket" content="This is the content of card 1." />
+      {/* <Card title="basket" content="This is the content of card 1." />
       <Card title="volley" content="This is the content of card 1." />
-      <Card title="Card 1" content="This is the content of card 1." />
+      <Card title="Card 1" content="This is the content of card 1." /> */}
       </>
     </div>
   )
