@@ -31,9 +31,9 @@ export default function RootLayout({
     {/* <BlogPage /> */}
     {/* <FeedbackComponent /> */}
     {/* <Characteristics /> */}
-    <HairTransplantProcedure />
+    {/* <HairTransplantProcedure /> */}
         {children}
-        {/* <Footer /> */}
+        <Footer />
         </body>
     </html>
   );
